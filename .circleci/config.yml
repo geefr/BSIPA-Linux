@@ -10,8 +10,7 @@
     steps:
       - checkout
       - run: cd IPALinux && ./publish-linux-x64.sh
-      - run: tar -C IPALinux/bin/Release/net5.0/publish-Linux64-bin/ -cvzf IPALinux-linux64-bin.tar.gz .
       - store_artifacts:
-          path: IPALinux-linux64-bin.tar.gz
-          destination: IPALinux-linux64-bin.tar.gz
+          path: IPALinux/bin/Release/net5.0/publish-linux64-bin/IPA-Minimal
+          destination: IPA-Minimal
 
