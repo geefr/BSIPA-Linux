@@ -1,0 +1,21 @@
+ version: 2.1
+
+ orbs:
+  win: circleci/windows@2.2.0
+
+ jobs:
+  build:
+    docker: 
+      - image: mcr.microsoft.com/dotnet/sdk:5.0
+    steps:
+      - checkout
+      - run: cd IPALinux && ./publish-linux-x64.sh
+      - run: tar -C IPALinux/bin/Release/net5.0/publish-Linux64-bin/ -cvzf IPALinux-linux64-bin.tar.gz .
+      - run: tar -C IPALinux/bin/Release/net5.0/publish-Linux64-lib/ -cvzf IPALinux-linux64-lib.tar.gz .
+      - store_artifacts:
+          path: IPALinux-linux64-bin.tar.gz
+          destination: IPALinux-linux64-bin.tar.gz
+      - store_artifacts:
+          path: IPALinux-linux64-lib.tar.gz
+          destination: IPALinux-linux64-lib.tar.gz
+
