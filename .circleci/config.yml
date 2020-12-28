@@ -9,8 +9,7 @@
       - image: mcr.microsoft.com/dotnet/sdk:5.0
     steps:
       - checkout
-      - run: cd IPALinux && ./publish-linux-x64.sh
+      - run: ./publish-linux-x64.sh
       - store_artifacts:
           path: IPALinux/bin/Release/net5.0/publish-linux64-bin/IPA-Minimal
           destination: IPA-Minimal
-
