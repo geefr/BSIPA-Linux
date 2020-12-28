@@ -37,13 +37,15 @@ namespace IPA
         public static readonly ArgumentFlag ArgLaunch = new ArgumentFlag("--launch", "-l")      { DocString = "uses positional parameters as arguments to start the game after patch/unpatch" };
 
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
-            Arguments.CmdLine.Flags(ArgHelp, ArgVersion, ArgWaitFor, ArgForce, ArgRevert, ArgNoWait, ArgStart, ArgLaunch, ArgNoRevert).Process();
+            var cmdLine = new Arguments(args);
+
+            cmdLine.Flags(ArgHelp, ArgVersion, ArgWaitFor, ArgForce, ArgRevert, ArgNoWait, ArgStart, ArgLaunch, ArgNoRevert).Process();
 
             if (ArgHelp)
             {
-                Arguments.CmdLine.PrintHelp();
+                cmdLine.PrintHelp();
                 return;
             }
 
@@ -93,7 +95,7 @@ namespace IPA
                 }
                 AppDomain.CurrentDomain.AssemblyResolve += AssemblyLibLoader;
 
-                var argExeName = Arguments.CmdLine.PositionalArgs.FirstOrDefault(s => s.EndsWith(".exe"));
+                var argExeName = cmdLine.PositionalArgs.FirstOrDefault(s => s.EndsWith(".exe"));
                 if (argExeName == null)
                     context = PatchContext.Create(new DirectoryInfo(Directory.GetCurrentDirectory()).GetFiles()
                             .First(o => o.Extension == ".exe" && o.FullName != Assembly.GetEntryAssembly().Location)
@@ -120,7 +122,7 @@ namespace IPA
                 else
                 {
                     Install(context);
-                    StartIfNeedBe(context);
+                    StartIfNeedBe(context, cmdLine);
                 }
             }
             catch (Exception e)
@@ -269,7 +271,7 @@ namespace IPA
             Console.ResetColor();
         }
 
-        private static void StartIfNeedBe(PatchContext context)
+        private static void StartIfNeedBe(PatchContext context, Arguments cmdLine)
         {
             if (ArgStart.HasValue)
             {
@@ -277,7 +279,7 @@ namespace IPA
             }
             else
             {
-                var argList = Arguments.CmdLine.PositionalArgs.ToList();
+                var argList = cmdLine.PositionalArgs.ToList();
 
                 argList.Remove(context.Executable);
 

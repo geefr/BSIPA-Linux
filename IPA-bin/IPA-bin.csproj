@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>IPA.Program</StartupObject>
+    <AssemblyName>IPA-Minimal</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\src\Arguments.cs" Link="Arguments.cs" />
+    <Compile Include="..\src\PatchContext.cs" Link="PatchContext.cs" />
+    <Compile Include="..\src\Patcher\BackupManager.cs" Link="Patcher\BackupManager.cs" />
+    <Compile Include="..\src\Patcher\BackupUnit.cs" Link="Patcher\BackupUnit.cs" />
+    <Compile Include="..\src\Program.cs" Link="Program.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Patcher\" />
+  </ItemGroup>
+
+</Project>
