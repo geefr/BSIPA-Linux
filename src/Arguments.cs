@@ -8,8 +8,6 @@ namespace IPA
 {
     public class Arguments
     {
-        public static readonly Arguments CmdLine = new Arguments(Environment.GetCommandLineArgs());
-
         private readonly List<string> positional = new List<string>();
         private readonly Dictionary<string, string> longFlags = new Dictionary<string, string>();
         private readonly Dictionary<char, string> flags = new Dictionary<char, string>();
@@ -17,7 +15,7 @@ namespace IPA
 
         private string[] toParse;
 
-        private Arguments(string[] args)
+        public Arguments(string[] args)
         {
             toParse = args.Skip(1).ToArray();
         }
