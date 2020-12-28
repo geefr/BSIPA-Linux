@@ -11,5 +11,5 @@
       - checkout
       - run: ./publish-linux-x64.sh
       - store_artifacts:
-          path: IPALinux/bin/Release/net5.0/publish-linux64-bin/IPA-Minimal
+          path: bin/Release/net5.0/publish-linux64-bin/IPA-Minimal
           destination: IPA-Minimal
