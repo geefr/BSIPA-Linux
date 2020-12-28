@@ -35,13 +35,15 @@ namespace IPA
         public static readonly ArgumentFlag ArgNoWait = new ArgumentFlag("--nowait", "-n")      { DocString = "doesn't wait for user input after the operation" };
         public static readonly ArgumentFlag ArgStart = new ArgumentFlag("--start", "-s")        { DocString = "uses the specified arguments to start the game after the patch/unpatch", ValueString = "ARGUMENTS" };
         public static readonly ArgumentFlag ArgLaunch = new ArgumentFlag("--launch", "-l")      { DocString = "uses positional parameters as arguments to start the game after patch/unpatch" };
+        public static readonly ArgumentFlag ArgRelativeToPwd = new ArgumentFlag("--relativeToPwd") { DocString = "Use the current working directory instead of executable paths during installation (IPA-Minimal specific hack)" };
 
         [STAThread]
         public static void Main(string[] args)
         {
+		Console.WriteLine(String.Join(",", args));
             var cmdLine = new Arguments(args);
 
-            cmdLine.Flags(ArgHelp, ArgVersion, ArgWaitFor, ArgForce, ArgRevert, ArgNoWait, ArgStart, ArgLaunch, ArgNoRevert).Process();
+            cmdLine.Flags(ArgHelp, ArgVersion, ArgWaitFor, ArgForce, ArgRevert, ArgNoWait, ArgStart, ArgLaunch, ArgNoRevert, ArgRelativeToPwd).Process();
 
             if (ArgHelp)
             {
@@ -99,9 +101,9 @@ namespace IPA
                 if (argExeName == null)
                     context = PatchContext.Create(new DirectoryInfo(Directory.GetCurrentDirectory()).GetFiles()
                             .First(o => o.Extension == ".exe" && o.FullName != Assembly.GetEntryAssembly().Location)
-                            .FullName);
+                            .FullName, ArgRelativeToPwd);
                 else
-                    context = PatchContext.Create(argExeName);
+                    context = PatchContext.Create(argExeName, ArgRelativeToPwd);
 
                 if (ArgVersion)
                 {
@@ -153,9 +155,9 @@ namespace IPA
         {
             if (!Directory.Exists(c.DataPathDst) || !File.Exists(c.EngineFile))
             {
-                Fail("Game does not seem to be a Unity project. Could not find the libraries to patch.");
                 Console.WriteLine($"DataPath: {c.DataPathDst}");
                 Console.WriteLine($"EngineFile: {c.EngineFile}");
+                Fail("Game does not seem to be a Unity project. Could not find the libraries to patch.");
             }
         }
 

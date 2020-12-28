@@ -28,15 +28,26 @@ namespace IPA
 
         private PatchContext() { }
 
-        public static PatchContext Create(string exe)
+        public static PatchContext Create(string exe, bool relativeToPwd)
         {
             var context = new PatchContext
             {
                 Executable = exe
             };
-            context.ProjectRoot = new FileInfo(context.Executable).Directory?.FullName;
+            if( relativeToPwd )
+            {
+                // Determine all paths relative to working directory
+                var pwd = Directory.GetCurrentDirectory();
+                context.ProjectRoot = pwd;
+                context.IPARoot = $"{pwd}/IPA";
+            }
+            else
+            {
+                context.ProjectRoot = new FileInfo(context.Executable).Directory?.FullName;
             // TODO: When running as .net core, packaged as a single file we need this, as executing assembly is actually unpacked to a temp dir
             context.IPARoot = Path.Combine(Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName) ?? throw new InvalidOperationException(), "IPA");
+            }
+            
             context.IPA = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
             context.DataPathSrc = Path.Combine(context.IPARoot, "Data");
             context.LibsPathSrc = Path.Combine(context.IPARoot, "Libs");
@@ -52,22 +63,6 @@ namespace IPA
             context.ShortcutPath = Path.Combine(context.ProjectRoot, shortcutName) + ".lnk";
 
             Directory.CreateDirectory(context.BackupPath);
-
-      //Console.WriteLine($"Patch Context\n" +
-      //$"Root: {context.ProjectRoot}\n" +
-      //$"IPARoot: {context.IPARoot}\n" +
-      //$"IPA: {context.IPA}\n" +
-      //$"DataSrc: {context.DataPathSrc}\n" +
-      //$"LibsSrc: {context.LibsPathSrc}\n" +
-      //$"PluginsFolder: {context.PluginsFolder}\n" +
-      //$"Name: {context.ProjectName}\n" +
-      //$"DataDst: {context.DataPathDst}\n" +
-      //$"LibsDst: {context.LibsPathDst}\n" +
-      //$"ManagedPath: {context.ManagedPath}\n" +
-      //$"Engine: {context.EngineFile}\n" +
-      //$"Assembly: {context.AssemblyFile}\n" +
-      //$"Backup: {context.BackupPath}\n" +
-      //$"Shortcut: {context.ShortcutPath}\n");
 
             return context;
         }
