@@ -1,0 +1,21 @@
+name: .NET
+
+on:
+  push:
+    branches: [ live ]
+  pull_request:
+    branches: [ live ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: ./publish-linux-x64.sh
+    - name: Upload artefact
+      uses: actions/upload-artifact@v2.2.1
+      with:
+        path: bin/Release/net5.0/publish-linux64-bin/IPA-Minimal
