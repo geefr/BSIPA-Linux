@@ -17,7 +17,11 @@ namespace IPA
 
         public Arguments(string[] args)
         {
-            toParse = args.Skip(1).ToArray();
+            // geefr/BSIPA-Linux
+            // This is different to the original IPA implementation
+            // * Stock IPA pulls arg array from Environment, and needs to strip program name from start of array
+            // * BSIPA-Linux just has Main(string[] args) and doesn't have the program name in the array
+            toParse = args;
         }
 
         public Arguments Flags(params ArgumentFlag[] toAdd)
