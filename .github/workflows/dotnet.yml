@@ -18,4 +18,4 @@ jobs:
     - name: Upload artefact
       uses: actions/upload-artifact@v2.2.1
       with:
-        path: bin/Release/net5.0/publish-linux64-bin/IPA-Minimal
+        path: bin/Release/net6.0/publish-linux64-bin/IPA-Minimal
