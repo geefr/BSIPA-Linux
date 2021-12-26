@@ -4,3 +4,5 @@ This is a fork/port of BSIPA to a Linux-native version, used to support beatsabe
 
 This variant only supports the IPA installation process, a full copy of [BSIPA](https://github.com/bsmg/BeatSaber-IPA-Reloaded) is still required to load mods at runtime.
 
+If you're looking for a full mod installer check out [Beataroni](https://github.com/geefr/beatsaber-linux-goodies).
+
